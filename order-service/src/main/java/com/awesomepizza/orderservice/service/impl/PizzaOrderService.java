@@ -45,10 +45,10 @@ public class PizzaOrderService implements IPizzaOrderService {
     @Scheduled(fixedRate = 20000)
     public void processOrders() throws InterruptedException {
         log.info("[START] PizzaOrderService::processOrders");
-        Optional<PizzaOrderEntity> lastOrder = pizzaOrderRepository.findFirstByStatusOrderByPizzaOrderCreatedAsc(OrderStatus.PENDING);
-        if (lastOrder.isPresent() && !isPizzaioloMakingPizza) {
+        Optional<PizzaOrderEntity> firstOrder = pizzaOrderRepository.findFirstByStatusOrderByPizzaOrderCreatedAsc(OrderStatus.PENDING);
+        if (firstOrder.isPresent() && !isPizzaioloMakingPizza) {
             isPizzaioloMakingPizza = true;
-            PizzaOrderEntity order = lastOrder.get();
+            PizzaOrderEntity order = firstOrder.get();
 
             // update order's status IN_PROGRESS
             log.info("Order " + order.getId() + " in progress");
